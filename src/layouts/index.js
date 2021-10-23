@@ -31,7 +31,12 @@ const Layouts = ({ children }) => {
         </Centered>
     )
   } else if (
-    ['/login', '/login-1', '/login-2', '/login-3'].includes(pathname)
+    [
+      '/login', 
+      '/login-1', 
+      '/login-2', 
+      '/login-3'
+    ].includes(pathname)
   ) {
     return (<><Empty>{children}</Empty> <Footer /></>)
   } else {
