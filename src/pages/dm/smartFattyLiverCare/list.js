@@ -30,19 +30,19 @@ const List = () => {
             },
             {
                 Header: '중성지방',
-                accessor: 'alpha3Code'
+                accessor: ''
             },
             {
                 Header: '알라닌아미노전이효소',
-                accessor: 'name'
+                accessor: ''
             },
             {
                 Header: '지방간 유무',
-                accessor: 'capital'
+                accessor: ''
             },
             {
                 Header: '지방 수준',
-                accessor: 'region'
+                accessor: ''
             }
         ],
         []
