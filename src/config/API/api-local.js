@@ -1,6 +1,6 @@
 const protocol = 'http';
-const host = '192.168.10.100';
-const port = '5001';
+const host = '192.168.10.106';
+const port = '5003';
 const trailUrl = 'api/v1';
 
 const hostUrl = `${protocol}://${host}${port ? ':' + port : ''}/`;
