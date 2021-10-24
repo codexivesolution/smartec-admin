@@ -45,7 +45,6 @@ const login = () => {
 
         const validEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
         if (statelogin.email && !validEmail.test(statelogin.email)) {
             login_Err.emailFormatErr = "잘못된 이메일."
             flag = true
