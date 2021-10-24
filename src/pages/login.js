@@ -36,7 +36,6 @@ const login = () => {
     const [isTypePassword, setIsTypePassword] = useState(true);
 
     const loginValidation = () => {
-        debugger
         let flag = false
         let login_Err = {
             emailError: "",
@@ -69,7 +68,6 @@ const login = () => {
     };
 
     const setLocalEmail = () => {
-        debugger
         const email = AuthStorage.getStorageData(STORAGEKEY.email);
         if (email) {
             setStatelogin({
@@ -81,7 +79,6 @@ const login = () => {
 
     const Login = (loginWith) => {
         setIsLoginSubmit(true);
-        debugger
         if (loginValidation()) {
             setBtnDisabled(true);
             return;
