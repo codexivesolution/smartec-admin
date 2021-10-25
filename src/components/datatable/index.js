@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react'
-import {useTable, useSortBy, usePagination, useRowSelect} from 'react-table'
-import {PageWithText} from '../pagination'
-import {FiChevronDown, FiChevronUp} from 'react-icons/fi'
+import React, { useEffect } from 'react'
+import { useTable, useSortBy, usePagination, useRowSelect } from 'react-table'
+import { PageWithText } from '../pagination'
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 
 const IndeterminateCheckbox = React.forwardRef(
-  ({indeterminate, ...rest}, ref) => {
+  ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef()
     const resolvedRef = ref || defaultRef
 
@@ -23,7 +23,7 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 )
 
-const Datatable = ({columns, data}) => {
+const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -38,12 +38,12 @@ const Datatable = ({columns, data}) => {
     nextPage,
     previousPage,
     setPageSize,
-    state: {pageIndex, pageSize, selectedRowIds}
+    state: { pageIndex, pageSize, selectedRowIds }
   } = useTable(
     {
       columns,
       data,
-      initialState: {pageIndex: 0, pageSize: 10}
+      initialState: { pageIndex: 0, pageSize: 1000 }
     },
     useSortBy,
     usePagination,
@@ -55,14 +55,15 @@ const Datatable = ({columns, data}) => {
           id: 'selection',
           // The header can use the table's getToggleAllRowsSelectedProps method
           // to render a checkbox
-          Header: ({getToggleAllRowsSelectedProps}) => (
+          Header: ({ getToggleAllRowsSelectedProps }) => (
             <>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+              {/* <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />  */}
+              선택
             </>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
-          Cell: ({row}) => (
+          Cell: ({ row }) => (
             <>
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </>
@@ -133,46 +134,50 @@ const Datatable = ({columns, data}) => {
       </table>
 
       <div className="flex flex-row items-center justify-between my-4">
-        <div className="flex flex-wrap items-center justify-start space-x-2 pagination">
-          {pageIndex !== 0 && (
-            <PageWithText onClick={() => gotoPage(0)}>First</PageWithText>
-          )}
-          {canPreviousPage && (
-            <PageWithText onClick={() => previousPage()}>Previous</PageWithText>
-          )}
-          {canNextPage && (
-            <PageWithText onClick={() => nextPage()} disabled={!canNextPage}>
-              Next
-            </PageWithText>
-          )}
-          {pageIndex !== pageCount - 1 && (
-            <PageWithText
-              onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}>
-              Last
-            </PageWithText>
-          )}
-        </div>
-
-        <span>
-          Page{' '}
-          <b>
-            {pageIndex + 1} of {pageOptions.length}
-          </b>{' '}
-        </span>
-
-        <select
-          className="form-select text-sm bg-white dark:bg-gray-800 dark:border-gray-800 outline-none shadow-none focus:shadow-none"
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value))
-          }}>
-          {[10, 25, 50, 100].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
+        {pagination &&
+          <div className="flex flex-wrap items-center justify-start space-x-2 pagination">
+            {pageIndex !== 0 && (
+              <PageWithText onClick={() => gotoPage(0)}>First</PageWithText>
+            )}
+            {canPreviousPage && (
+              <PageWithText onClick={() => previousPage()}>Previous</PageWithText>
+            )}
+            {canNextPage && (
+              <PageWithText onClick={() => nextPage()} disabled={!canNextPage}>
+                Next
+              </PageWithText>
+            )}
+            {pageIndex !== pageCount - 1 && (
+              <PageWithText
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}>
+                Last
+              </PageWithText>
+            )}
+          </div>
+        }
+        {numberofpage &&
+          <span>
+            Page{' '}
+            <b>
+              {pageIndex + 1} of {pageOptions.length}
+            </b>{' '}
+          </span>
+        }
+        {nextprev &&
+          <select
+            className="form-select text-sm bg-white dark:bg-gray-800 dark:border-gray-800 outline-none shadow-none focus:shadow-none"
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value))
+            }}>
+            {[10, 25, 50, 100].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        }
       </div>
       <pre>
         {JSON.stringify(

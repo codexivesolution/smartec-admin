@@ -20,12 +20,12 @@ const initialState = [
   {
     items: [
       {
-        url: '/',
+        url: '/user',
         icon: <FiActivity size={20} />,
         title: '기본 설정',
         items: [
           {
-            url: '/dashboard',
+            url: '/user/list',
             title: '사용자 관리',
             items: []
           }
@@ -36,22 +36,22 @@ const initialState = [
   {
     items: [
       {
-        url: '/',
+        url: '/cim',
         icon: <FiActivity size={20} />,
         title: '회사 정보 관리',
         items: [
           {
-            url: '/',
+            url: '/cim/historyManagment/list',
             title: '연혁 관리',
             items: []
           },
           {
-            url: '/',
+            url: '/cim/RNDManagment/list',
             title: '연구 개발 관리',
             items: []
           },
           {
-            url: '/',
+            url: '/cim/investmentInfo/list',
             title: '투자 정보',
             items: []
           }
@@ -62,17 +62,17 @@ const initialState = [
   {
     items: [
       {
-        url: '/',
+        url: '/dm',
         icon: <FiActivity size={20} />,
         title: '자료 관리',
         items: [
           {
-            url: '/',
+            url: '/dm/dataScience/list',
             title: '데이터 사이언스',
             items: []
           },
           {
-            url: '/',
+            url: '/dm/smartFattyLiverCare/list',
             title: '스마트 지방간 케어',
             items: []
           }

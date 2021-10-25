@@ -1,7 +1,7 @@
-const protocol = 'https';
-const host = '192.168.10.105';
-const port = '5001';
-const trailUrl = 'api';
+const protocol = 'http';
+const host = '192.168.10.106';
+const port = '5003';
+const trailUrl = 'api/v1';
 
 const hostUrl = `${protocol}://${host}${port ? ':' + port : ''}/`;
 const endpoint = `${protocol}://${host}${(port ? ':' + port : '')}/${trailUrl}`;

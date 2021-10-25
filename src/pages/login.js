@@ -1,19 +1,17 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
 import STORAGEKEY from '../config/APP/app.config';
 import { ApiPost } from '../helper/API/ApiData';
 import AuthStorage from '../helper/AuthStorage';
-import Centered from '../layouts/centered';
-import Footer from '../layouts/footer/footer';
+import { changeLoginState } from '../redux/actions/loginAction';
 
 const login = () => {
 
-    const history = useHistory();
+    const router = useRouter()
     const dispatch = useDispatch();
-    // const { is_loggedin } = useSelector((state) => state.login);
-
+    const { is_loggedin } = useSelector((state) => state.login);
     const loginFormState = {
         email: "",
         password: "",
@@ -36,7 +34,6 @@ const login = () => {
     const [isTypePassword, setIsTypePassword] = useState(true);
 
     const loginValidation = () => {
-        debugger
         let flag = false
         let login_Err = {
             emailError: "",
@@ -45,7 +42,6 @@ const login = () => {
         };
 
         const validEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 
         if (statelogin.email && !validEmail.test(statelogin.email)) {
             login_Err.emailFormatErr = "잘못된 이메일."
@@ -69,7 +65,6 @@ const login = () => {
     };
 
     const setLocalEmail = () => {
-        debugger
         const email = AuthStorage.getStorageData(STORAGEKEY.email);
         if (email) {
             setStatelogin({
@@ -80,8 +75,7 @@ const login = () => {
     }
 
     const Login = (loginWith) => {
-        setIsLoginSubmit(true);
-        debugger
+        // setIsLoginSubmit(true);
         if (loginValidation()) {
             setBtnDisabled(true);
             return;
@@ -93,9 +87,9 @@ const login = () => {
         })
             .then((res) => {
 
-                // setStatelogin(loginFormState);
-                // dispatch(changeLoginState(true))
-
+                setStatelogin(loginFormState);
+                dispatch(changeLoginState(true))
+                debugger
                 if (saveEmail) {
                     AuthStorage.setStorageData(STORAGEKEY.email, statelogin.email, true);
                 } else {
@@ -113,8 +107,7 @@ const login = () => {
                     res.data,
                     stayLogedIn
                 );
-
-                history.push("/member/member-list");
+                router.push("/");
             })
             .catch((error) => {
                 if (error === "Wrong Email") {
@@ -167,22 +160,22 @@ const login = () => {
                             value={statelogin.email}
                             onChange={(e) => setStatelogin({ ...statelogin, email: e.target.value })}
                         />
-                    </div>
-                    {loginErrors.emailError && (
-                        <p className="form-error">
-                            {loginErrors.emailError}
-                        </p>
-                    )}
-                    {loginErrors.emailFormatErr && (
-                        <p className="form-error">
-                            {loginErrors.emailFormatErr}
-                        </p>
-                    )}
-                    {!loginErrors.emailError &&
-                        !loginErrors.emailFormatErr &&
-                        invalidEmail && (
-                            <p className="form-error">{invalidEmail}</p>
+                        {loginErrors.emailError && (
+                            <p className="form-error">
+                                {loginErrors.emailError}
+                            </p>
                         )}
+                        {loginErrors.emailFormatErr && (
+                            <p className="form-error">
+                                {loginErrors.emailFormatErr}
+                            </p>
+                        )}
+                        {!loginErrors.emailError &&
+                            !loginErrors.emailFormatErr &&
+                            invalidEmail && (
+                                <p className="form-error">{invalidEmail}</p>
+                            )}
+                    </div>
                 </div>
                 <div className="w-full mb-4 relative">
                     <div className={`form-element`}>
@@ -196,17 +189,17 @@ const login = () => {
                             onChange={(e) => setStatelogin({ ...statelogin, password: e.target.value })}
                         />
 
-                    </div>
-                    <img className="absolute right-2.5 top-9" src="./images/view-eye.png" onClick={togglrPass} />
+                        <img className="absolute right-2.5 top-9" src="./images/view-eye.png" onClick={togglrPass} />
 
-                    {loginErrors.passError && (
-                        <p className="form-error">
-                            {loginErrors.passError}
-                        </p>
-                    )}
-                    {!loginErrors.passError && incorrectPass && (
-                        <p className="form-error">{incorrectPass}</p>
-                    )}
+                        {loginErrors.passError && (
+                            <p className="form-error">
+                                {loginErrors.passError}
+                            </p>
+                        )}
+                        {!loginErrors.passError && incorrectPass && (
+                            <p className="form-error">{incorrectPass}</p>
+                        )}
+                    </div>
                 </div>
                 <div className="w-full mb-4">
                     <div className={`form-element form-element-inline`}>
