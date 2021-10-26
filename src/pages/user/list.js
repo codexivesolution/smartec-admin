@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Datatable from '../../components/datatable'
-import { formatNumber } from '../../functions/numbers'
-import countries from '../../json/countries.json'
 import SectionTitle from '../../components/section-title'
 import Widget from '../../components/widget'
 import { ApiGet, ApiPut } from '../../helper/API/ApiData'
@@ -39,37 +37,29 @@ const List = () => {
         ],
         []
     )
-    const data = React.useMemo(() => countries, [])
     const [searchKeyword, setSearchKeyword] = useState("")
     const [seletedDeleteIDs, setSeletedDeleteIDs] = useState("")
-    const [btnDisable, setBtnDisable] = useState(true)
     const [userDataList, setUserDataList] = useState([])
 
     const handleChange = (e) => {
-        // if (e.target.value !== "") {
-        //     setBtnDisable(false)
-        // } else {
-        //     setBtnDisable(true)
-        // }
         setSearchKeyword(e.target.value)
     }
 
     const getAllUser = (per_page = 50, page_number = 1) => {
         ApiGet(`admin/getFilteredUser?search_term=${searchKeyword}&per_page=${per_page}&page_number=${page_number}`)
             .then((res) => {
-                setUserDataList(res?.data?.users ? res?.data?.users : [])
                 setUserDataList(res?.data?.users &&
                     res?.data?.users.map((data, index) => {
                         return {
-                            id: data.id,
+                            id: data?.id,
                             // number: res.data.count - (page - 1) * sizePerPage - index,
                             number: index + 1,
-                            email: data.email,
-                            name: "",
-                            organization: data.organization,
-                            country: data.country,
-                            registrationDate: data.created_at
-                                ? moment(data.created_at).format("YYYY-MM-DD")
+                            email: data?.email,
+                            name: data?.email,
+                            organization: data?.organization,
+                            country: data?.country,
+                            registrationDate: data?.created_at
+                                ? moment(data?.created_at).format("YYYY-MM-DD")
                                 : "",
 
                         }
@@ -89,7 +79,6 @@ const List = () => {
     }
 
     const deleteUsers = () => {
-        debugger
         ApiPut(`admin/auth/deleteUser`, {
             id: seletedDeleteIDs
         })
@@ -131,7 +120,6 @@ const List = () => {
                             type="button"
                             className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
                             onClick={() => getAllUser()}
-                            // disabled={btnDisable}
                         >검색
                         </button>
                     </div>
@@ -144,6 +132,7 @@ const List = () => {
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold "
                         onClick={deleteUsers}
+                        disabled={seletedDeleteIDs ? false : true}
                     >선택 삭제
                     </button>
                 </div>

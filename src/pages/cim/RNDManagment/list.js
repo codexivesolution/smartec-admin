@@ -1,49 +1,89 @@
 import router from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Datatable from '../../../components/datatable'
 import SectionTitle from '../../../components/section-title'
 import Widget from '../../../components/widget'
-import countries from '../../../json/countries.json'
-
+import { ApiGet, ApiPost } from '../../../helper/API/ApiData'
 
 const List = () => {
     const columns = React.useMemo(
         () => [
             {
                 Header: '이미지',
-                accessor: 'alpha3Code'
+                accessor: 'thesis_file'
             },
             {
                 Header: '제목',
-                accessor: 'name'
+                accessor: 'title'
             },
             {
                 Header: '논문 링크',
-                accessor: 'capital'
+                accessor: 'thesis_link'
             },
             {
                 Header: '작성일',
-                accessor: 'region'
+                accessor: 'registrationDate'
             }
         ],
         []
     )
-    const data = React.useMemo(() => countries, [])
     const [searchKeyword, setSearchKeyword] = useState("")
-    const [btnDisable, setBtnDisable] = useState(true)
+    const [rnDDataList, setRnDDataList] = useState([])
+    const [seletedDeleteIDs, setSeletedDeleteIDs] = useState("")
 
     const handleChange = (e) => {
-        if (e.target.value !== "") {
-            setBtnDisable(false)
-        } else {
-            setBtnDisable(true)
-        }
         setSearchKeyword(e.target.value)
+    }
+
+    const getRowVal = (rowData) => {
+        // router.push('/cim/RNDManagment/'+rowData.id)
+    }
+
+    const getSelectedRowIds = (selectedRowIdsData) => {
+        const ids = selectedRowIdsData.map((data) => data.id).join(',')
+        setSeletedDeleteIDs(ids)
+    }
+
+    const deleteRnDdata = () => {
+        ApiPost(`researchAndDevelopment/delete-research-and-development-by-admin`, {
+            id: seletedDeleteIDs
+        })
+            .then((res) => {
+                getAllRNDData(50, 1)
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    }
+
+
+    const getAllRNDData = (per_page = 50, page_number = 1) => {
+        ApiGet(`researchAndDevelopment/get-research-and-development-by-admin?keyword=${searchKeyword}&per_page=${per_page}&page_number=${page_number}`)
+            .then((res) => {
+                setRnDDataList(res?.data?.researchAndDevelopment &&
+                    res?.data?.researchAndDevelopment.map((d, index) => {
+                        return {
+                            id: d?.id,
+                            number: index + 1,
+                            content: d?.content,
+                            thesis_file: d?.thesis_file,
+                            thesis_link: d?.thesis_link,
+                            title: d?.title,
+                            registrationDate: d?.created_at,
+                        }
+                    }))
+            })
+            .catch((error) => {
+            });
     }
 
     const createHistory = () => {
         router.push('/cim/RNDManagment/0')
     }
+
+    useEffect(() => {
+        getAllRNDData()
+    }, [])
 
     return (
         <>
@@ -69,13 +109,12 @@ const List = () => {
                         <button
                             type="button"
                             className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                            // onClick={Login}
-                            disabled={btnDisable}
+                            onClick={() => getAllRNDData(50,1)}
                         >검색
                         </button>
                     </div>
                 </div>
-                <Datatable columns={columns} data={data} pagination={false} numberofpage={false} nextprev={false} />
+                <Datatable columns={columns} data={rnDDataList} pagination={false} numberofpage={false} nextprev={false}  getRowVal={getRowVal} getSelectedRowIds={getSelectedRowIds} />
             </Widget>
             <div className="flex flex-col lg:flex-row lg:flex-wrap justify-end">
                 <div className="mb-4 mr-10 ">
@@ -83,7 +122,6 @@ const List = () => {
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold "
                         onClick={createHistory}
-                    // disabled={btnDisable}
                     >작성하기
                     </button>
                 </div>
@@ -92,8 +130,8 @@ const List = () => {
                     <button
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold "
-                    // onClick={Login}
-                    // disabled={btnDisable}
+                    onClick={deleteRnDdata}
+                    disabled={seletedDeleteIDs ? false : true}
                     >선택 삭제
                     </button>
                 </div>

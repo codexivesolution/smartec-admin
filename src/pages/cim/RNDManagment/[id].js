@@ -2,35 +2,35 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import SectionTitle from '../../../components/section-title';
 import Widget from '../../../components/widget';
+import { ApiGet, ApiPost, ApiPut } from '../../../helper/API/ApiData';
 
 const EditRnDManage = () => {
     const router = useRouter();
     const { id } = router.query
-    const [userData, setUserData] = useState({
+    const [rnDData, setRnDData] = useState({
         id: "",
         title: "",
         content: "",
         thesisLink: "",
         image: ""
-
     })
 
     const handleChange = (e) => {
-        setUserData({
-            ...userData,
+        setRnDData({
+            ...rnDData,
             [e.target.name]: e.target.value
         })
     }
 
-    const getUserByID = () => {
-        ApiGet(`general/getFuneralNewsByID/${id}`)
+    const getRnDDataByID = () => {
+        ApiGet(`researchAndDevelopment/get-research-and-development-by-id/${id}`)
             .then((res) => {
-                setUserData({
+                setRnDData({
                     id: id,
-                    title: "",
-                    content: "",
-                    thesisLink: "",
-                    image: ""
+                    title: res.data.title,
+                    content: res.data.content,
+                    thesisLink: res.data.thesis_link,
+                    image: res.data.thesis_file
                 })
             })
             .catch((error) => {
@@ -38,21 +38,37 @@ const EditRnDManage = () => {
             });
     }
 
-    const saveUser = () => {
-        router.push('/cim/RNDManagment/list')
+    const saveRnD = () => {
+        const body = {
+            title: rnDData.title,
+            content: rnDData.content,
+            thesis_link: rnDData.thesisLink,
+            thesis_file: "test",
+        }
+        if (id === "0") {
+            ApiPost("researchAndDevelopment/add-research-and-development", body)
+                .then((res) => {
+                    router.push('/cim/RNDManagment/list')
+                })
+        } else {
+            ApiPut("researchAndDevelopment/edit-research-and-development/" + id, body)
+                .then((res) => {
+                    router.push('/cim/RNDManagment/list')
+                })
+        }
     }
 
     useEffect(() => {
-        debugger
-        if (id > 0) {
-            setUserData({
-                title: "title test",
-                content: "test content",
-                thesisLink: "www.link.com",
-                image: "image.png"
-            })
+        if (id !== "0") {
+            getRnDDataByID()
         }
     }, [id])
+    useEffect(() => {
+        if (id !== "0") {
+            getRnDDataByID()
+        }
+    }, [])
+
     return (
         <>
             <SectionTitle title="기본 설정" subtitle="연구 개발 관리" />
@@ -69,7 +85,7 @@ const EditRnDManage = () => {
                                 type="text"
                                 className="form-input"
                                 placeholder="제목을 입력하세요."
-                                value={userData.title}
+                                value={rnDData.title}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -81,22 +97,12 @@ const EditRnDManage = () => {
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
                             <div className="form-label">내용</div>
-                            {/* <input
-                                name="content"
-                                type="text"
-                                className="form-input"
-                                placeholder="내용을 입력하세요."
-                                value={userData.content}
-                                autoComplete="off"
-                                onChange={(e) => handleChange(e)}
-                            /> */}
                             <textarea
-                                // ref={item.ref}
                                 name="content"
                                 className="form-textarea"
                                 rows="3"
                                 placeholder="내용을 입력하세요."
-                                value={userData.content}
+                                value={rnDData.content}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             >
@@ -115,7 +121,7 @@ const EditRnDManage = () => {
                                 type="text"
                                 className="form-input"
                                 placeholder="논문 링크를 입력하세요."
-                                value={userData.thesisLink}
+                                value={rnDData.thesisLink}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -132,7 +138,7 @@ const EditRnDManage = () => {
                                 type="file"
                                 className="form-input"
                                 placeholder="이미지 첨부하기"
-                                src={userData.image}
+                                src={rnDData.image}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -148,7 +154,7 @@ const EditRnDManage = () => {
                     <button
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                        onClick={saveUser}
+                        onClick={saveRnD}
                     >
                         {id ? "수정하기" : "작성하기"}
                     </button>

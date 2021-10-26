@@ -2,45 +2,33 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import SectionTitle from '../../../components/section-title';
 import Widget from '../../../components/widget';
+import { ApiGet, ApiPost, ApiPut } from '../../../helper/API/ApiData';
 
 const EditHistory = () => {
     const router = useRouter();
     const { id } = router.query
-    const [userData, setUserData] = useState({
+    const [historyData, setHistoryData] = useState({
         id: "",
         year: "",
         month: "",
         content: ""
-
     })
 
     const handleChange = (e) => {
-        setUserData({
-            ...userData,
+        setHistoryData({
+            ...historyData,
             [e.target.name]: e.target.value
         })
     }
 
-    const disableEnable = (type) => {
-        if (type === "name") {
-            setNameDisabled(!nameDisabled)
-        }
-        if (type === "organization") {
-            setOrganizationDisabled(!organizationDisabled)
-        }
-        if (type === "country") {
-            setCountryDisabled(!countryDisabled)
-        }
-    }
-
-    const getUserByID = () => {
-        ApiGet(`general/getFuneralNewsByID/${id}`)
+    const getHistoryByID = () => {
+        ApiGet(`CompanyInformation/get-company-information-by-id/${id}`)
             .then((res) => {
-                setUserData({
+                setHistoryData({
                     id: id,
-                    year: "",
-                    month: "",
-                    content: ""
+                    year: res?.data?.year,
+                    month: res?.data?.month,
+                    content: res?.data?.content
                 })
             })
             .catch((error) => {
@@ -48,20 +36,36 @@ const EditHistory = () => {
             });
     }
 
-    const saveUser = () => {
-        router.push('/cim/historyManagment/list')
+    const saveHistory = () => {
+        const body = {
+            year: historyData.year,
+            month: historyData.month,
+            content: historyData.content,
+        }
+        if (id === "0") {
+            ApiPost("CompanyInformation/add-company-information" , body)
+                .then((res) => {
+                    router.push('/cim/historyManagment/list')
+                })
+        } else {
+            ApiPut("CompanyInformation/edit-company-information/" + id, body)
+                .then((res) => {
+                    router.push('/cim/historyManagment/list')
+                })
+        }
     }
 
     useEffect(() => {
-        debugger
-        if (id > 0) {
-            setUserData({
-                year: "2021",
-                month: "10",
-                content: "Test Content"
-            })
+        if (id !== "0") {
+            getHistoryByID()
         }
     }, [id])
+    useEffect(() => {
+        if (id !== "0") {
+            getHistoryByID()
+        }
+    }, [])
+
     return (
         <>
             <SectionTitle title="기본 설정" subtitle="사용자 관리" />
@@ -78,7 +82,7 @@ const EditHistory = () => {
                                 type="text"
                                 className="form-input"
                                 placeholder="연도를 입력하세요."
-                                value={userData.year}
+                                value={historyData.year}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -95,7 +99,7 @@ const EditHistory = () => {
                                 type="text"
                                 className="form-input"
                                 placeholder="월을 입력하세요."
-                                value={userData.month}
+                                value={historyData.month}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -107,22 +111,12 @@ const EditHistory = () => {
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
                             <div className="form-label">소속</div>
-                            {/* <input
-                                name="content"
-                                type="text"
-                                className="form-input"
-                                placeholder="내용을 입력하세요."
-                                value={userData.content}
-                                autoComplete="off"
-                                onChange={(e) => handleChange(e)}
-                            /> */}
                             <textarea
-                                // ref={item.ref}
                                 name="content"
                                 className="form-textarea"
                                 rows="3"
                                 placeholder="내용을 입력하세요."
-                                value={userData.content}
+                                value={historyData.content}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             >
@@ -130,8 +124,6 @@ const EditHistory = () => {
                         </div>
                     </div>
                 </div>
-
-
             </Widget>
 
             <div className="flex flex-col lg:flex-row lg:flex-wrap justify-end">
@@ -139,7 +131,7 @@ const EditHistory = () => {
                     <button
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                        onClick={saveUser}
+                        onClick={saveHistory}
                     >
                         {id ? "수정하기" : "작성하기"}
                     </button>

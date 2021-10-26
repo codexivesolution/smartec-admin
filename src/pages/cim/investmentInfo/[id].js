@@ -2,33 +2,33 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import SectionTitle from '../../../components/section-title';
 import Widget from '../../../components/widget';
+import { ApiGet, ApiPost, ApiPut } from '../../../helper/API/ApiData';
 
 const EditInvestmentInfo = () => {
     const router = useRouter();
     const { id } = router.query
-    const [userData, setUserData] = useState({
+    const [investmentData, setInvestmentData] = useState({
         id: "",
         title: "",
         content: "",
-        image: ""
-
+        file: ""
     })
 
     const handleChange = (e) => {
-        setUserData({
-            ...userData,
+        setInvestmentData({
+            ...investmentData,
             [e.target.name]: e.target.value
         })
     }
 
-    const getUserByID = () => {
-        ApiGet(`general/getFuneralNewsByID/${id}`)
+    const getInvestmentByID = () => {
+        ApiGet(`companyinvestment/get-company-investment-by-id/${id}`)
             .then((res) => {
-                setUserData({
+                setInvestmentData({
                     id: id,
-                    title: "",
-                    content: "",
-                    image: ""
+                    title: res.data.title,
+                    content: res.data.content,
+                    file: res.data.thesis_file
                 })
             })
             .catch((error) => {
@@ -36,20 +36,37 @@ const EditInvestmentInfo = () => {
             });
     }
 
-    const saveUser = () => {
-        router.push('/cim/investmentInfo/list')
+    const saveInevestmentData = () => {
+        const body = {
+            title: investmentData.title,
+            content: investmentData.content,
+            file: "test",
+        }
+        debugger
+        if (id === "0") {
+            ApiPost("companyinvestment/add-company-investment", body)
+                .then((res) => {
+                    router.push('/cim/investmentInfo/list')
+                })
+        } else {
+            ApiPut("companyinvestment/edit-company-investment/" + id, body)
+                .then((res) => {
+                    router.push('/cim/investmentInfo/list')
+                })
+        }
     }
 
     useEffect(() => {
-        debugger
-        if (id > 0) {
-            setUserData({
-                title: "title test",
-                content: "test content",
-                image: "image.png"
-            })
+        if (id !== "0") {
+            getInvestmentByID()
         }
     }, [id])
+    useEffect(() => {
+        if (id !== "0") {
+            getInvestmentByID()
+        }
+    }, [])
+
     return (
         <>
             <SectionTitle title="기본 설정" subtitle="연구 개발 관리" />
@@ -66,7 +83,7 @@ const EditInvestmentInfo = () => {
                                 type="text"
                                 className="form-input"
                                 placeholder="제목을 입력하세요."
-                                value={userData.title}
+                                value={investmentData.title}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -78,22 +95,13 @@ const EditInvestmentInfo = () => {
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
                             <div className="form-label">내용</div>
-                            {/* <input
-                                name="content"
-                                type="text"
-                                className="form-input"
-                                placeholder="내용을 입력하세요."
-                                value={userData.content}
-                                autoComplete="off"
-                                onChange={(e) => handleChange(e)}
-                            /> */}
                             <textarea
                                 // ref={item.ref}
                                 name="content"
                                 className="form-textarea"
                                 rows="3"
                                 placeholder="내용을 입력하세요."
-                                value={userData.content}
+                                value={investmentData.content}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             >
@@ -111,7 +119,7 @@ const EditInvestmentInfo = () => {
                                 type="file"
                                 className="form-input"
                                 placeholder="이미지 첨부하기"
-                                src={userData.image}
+                                src={investmentData.file}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
                             />
@@ -127,7 +135,7 @@ const EditInvestmentInfo = () => {
                     <button
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                        onClick={saveUser}
+                        onClick={saveInevestmentData}
                     >
                         {id ? "수정하기" : "작성하기"}
                     </button>

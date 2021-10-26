@@ -15,7 +15,6 @@ const EditUser = () => {
         email: "",
         organization: "",
         country: "",
-
     })
     const [nameDisabled, setNameDisabled] = useState(true)
     const [organizationDisabled, setOrganizationDisabled] = useState(true)
@@ -44,7 +43,6 @@ const EditUser = () => {
     const getUserByID = () => {
         ApiGet(`user/${id}`)
             .then((res) => {
-                console.log("res res 0", res);
                 setUserData({
                     id: id,
                     name: res.data.first_name + " " + res.data.last_name,

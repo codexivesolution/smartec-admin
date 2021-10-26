@@ -8,7 +8,6 @@ import AuthStorage from '../helper/AuthStorage';
 import { changeLoginState } from '../redux/actions/loginAction';
 
 const login = () => {
-
     const router = useRouter()
     const dispatch = useDispatch();
     const { is_loggedin } = useSelector((state) => state.login);
@@ -74,7 +73,6 @@ const login = () => {
     }
 
     const Login = (loginWith) => {
-        // setIsLoginSubmit(true);
         if (loginValidation()) {
             setBtnDisabled(true);
             return;
@@ -139,10 +137,6 @@ const login = () => {
     useEffect(() => {
         setLocalEmail()
     }, []);
-
-    useEffect(() => {
-        console.log("saveEmail", saveEmail);
-    }, [saveEmail]);
 
     return (
         <div data-layout="centered" className="w-full h-screen flex items-center justify-center bg-gray-50">
