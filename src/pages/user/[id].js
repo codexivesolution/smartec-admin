@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import SectionTitle from '../../components/section-title';
 import Widget from '../../components/widget';
+import { ApiGet, ApiPatch } from '../../helper/API/ApiData';
 import countries from '../../json/countries.json'
 
 const EditUser = () => {
@@ -41,15 +42,16 @@ const EditUser = () => {
     }
 
     const getUserByID = () => {
-        ApiGet(`general/getFuneralNewsByID/${id}`)
+        ApiGet(`user/${id}`)
             .then((res) => {
+                console.log("res res 0", res);
                 setUserData({
                     id: id,
-                    name: "",
-                    regDate: "",
-                    email: "",
-                    organization: "",
-                    country: "",
+                    name: res.data.first_name + " " + res.data.last_name,
+                    regDate: res.data.country,
+                    email: res.data.email,
+                    organization: res.data.organization,
+                    country: res.data.country,
                 })
             })
             .catch((error) => {
@@ -58,17 +60,23 @@ const EditUser = () => {
     }
 
     const saveUser = () => {
-        router.push('/user/list')
+        const body = {
+            last_name: userData.name,
+            first_name: userData.name,
+            email: userData.email,
+            organization: userData.organization,
+            country: userData.country
+        }
+        
+        ApiPatch("admin/edituser/" + id, body)
+            .then((res) => {
+                router.push('/user/list');
+            })
+
     }
 
     useEffect(() => {
-        setUserData({
-            name: "ravi",
-            regDate: "2021-10-21",
-            email: "ravi.codexivesolutions.com",
-            organization: "codexive",
-            country: "India",
-        })
+        getUserByID()
     }, [])
 
     return (

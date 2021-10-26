@@ -23,7 +23,7 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 )
 
-const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
+const Datatable = ({ columns, data, pagination, numberofpage, nextprev, getRowVal, getSelectedRowIds }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -68,11 +68,16 @@ const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </>
           )
+
         },
         ...columns
       ])
     }
   )
+
+  const getVal = (e,row) => {
+    getRowVal(row.original)
+  }
 
   useEffect(() => {
     //callback goes here to get selected row ids
@@ -88,6 +93,12 @@ const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
         2
       )
     )
+    const selectedRowIdsData = data.filter((item, index) =>
+        Object.keys(selectedRowIds)
+          .map((i) => parseInt(i, 10))
+          .includes(index)
+      )
+    getSelectedRowIds(selectedRowIdsData)
   }, [selectedRowIds])
 
   // Render the UI for your table
@@ -123,7 +134,7 @@ const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
           {page.map((row, i) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()} onClick={(e) => getVal(e,row)}>
                 {row.cells.map((cell) => {
                   return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                 })}
@@ -179,7 +190,7 @@ const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
           </select>
         }
       </div>
-      <pre>
+      {/* <pre>
         {JSON.stringify(
           data.filter((item, index) =>
             Object.keys(selectedRowIds)
@@ -189,7 +200,7 @@ const Datatable = ({ columns, data, pagination, numberofpage, nextprev }) => {
           null,
           2
         )}
-      </pre>
+      </pre> */}
     </>
   )
 }

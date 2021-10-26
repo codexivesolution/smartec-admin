@@ -25,7 +25,6 @@ const login = () => {
 
     const [statelogin, setStatelogin] = useState(loginFormState);
     const [loginErrors, setLoginErrors] = useState(login_Err);
-    const [isloginSubmit, setIsLoginSubmit] = useState(false);
     const [stayLogedIn, setStayLogedIn] = useState(false);
     const [incorrectPass, setIncorrectPass] = useState("");
     const [invalidEmail, setInvalidEmail] = useState("");
@@ -107,7 +106,7 @@ const login = () => {
                     res.data,
                     stayLogedIn
                 );
-                router.push("/");
+                router.push("/user/list");
             })
             .catch((error) => {
                 if (error === "Wrong Email") {

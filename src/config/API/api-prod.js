@@ -4,7 +4,9 @@ const port = '5003';
 const trailUrl = 'api/v1';
 
 const hostUrl = `${protocol}://${host}${port ? ':' + port : ''}/`;
-const endpoint = `${protocol}://${host}${(port ? ':' + port : '')}/${trailUrl}`;
+// const endpoint = `${protocol}://${host}${(port ? ':' + port : '')}/${trailUrl}`;
+const endpoint = `http://d852-43-240-8-134.ngrok.io/${trailUrl}`;
+
 
 export default {
     protocol: protocol,
