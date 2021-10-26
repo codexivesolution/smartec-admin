@@ -72,7 +72,6 @@ const EditUser = () => {
             .then((res) => {
                 router.push('/user/list');
             })
-
     }
 
     useEffect(() => {

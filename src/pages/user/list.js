@@ -46,11 +46,11 @@ const List = () => {
     const [userDataList, setUserDataList] = useState([])
 
     const handleChange = (e) => {
-        if (e.target.value !== "") {
-            setBtnDisable(false)
-        } else {
-            setBtnDisable(true)
-        }
+        // if (e.target.value !== "") {
+        //     setBtnDisable(false)
+        // } else {
+        //     setBtnDisable(true)
+        // }
         setSearchKeyword(e.target.value)
     }
 
@@ -130,8 +130,8 @@ const List = () => {
                         <button
                             type="button"
                             className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                            // onClick={Login}
-                            disabled={btnDisable}
+                            onClick={() => getAllUser()}
+                            // disabled={btnDisable}
                         >검색
                         </button>
                     </div>
