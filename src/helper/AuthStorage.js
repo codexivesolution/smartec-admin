@@ -46,9 +46,9 @@ class AuthStorage {
         sessionStorage.removeItem(key);
     }
 
-//     static getLang() {
-//         return localStorage.getItem(STORAGEKEY.lang) || getCookie('i18next') || "ko";
-//     }
+    static getLang() {
+        return localStorage.getItem(STORAGEKEY.lang) || getCookie('i18next') || "ko";
+    }
 }
 
 export default AuthStorage;

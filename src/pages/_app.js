@@ -2,7 +2,7 @@ import Head from 'next/head'
 import {Provider} from 'react-redux'
 import Layout from '../layouts'
 import {useStore} from '../store'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import NProgress from 'nprogress'
 import '../css/tailwind.css'
 import '../css/main.css'
@@ -25,13 +25,37 @@ import '../css/components/tables.css'
 import '../css/components/tabs.css'
 import '../css/components/user-widgets/widget-2.css'
 import '../css/components/user-widgets/widget-4.css'
+import AuthStorage from '../helper/AuthStorage'
+import { useEffect } from 'react'
+// import { useLocation } from 'react-router'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
 export default function App({Component, pageProps}) {
+  // const location = useLocation()
+  const router = useRouter()
   const store = useStore(pageProps.initialReduxState)
+  const pathname = ["/login", "/Registration", "/memorialview", "/memorialhallstatus",]
+
+  useEffect(() => {
+    if (AuthStorage.isUserAuthenticated()) {
+      // ApiGet("user/validate")
+      //   .then((res) => {
+      //     dispatch(changeLoginState(true));
+      //   })
+      //   .catch((error) => {
+      //     AuthStorage.deauthenticateUser();
+      //     router.push("/login");
+      //   });
+    }
+    else {
+      // if (!pathname.includes(location.pathname)) {
+        router.push("/login");
+      // }
+    }
+  }, []);
 
   return (
     <>
