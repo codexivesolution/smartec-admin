@@ -6,7 +6,7 @@ import Widget from '../../../components/widget';
 const DataScience = () => {
     const router = useRouter();
     const { id } = router.query
-    const [userData, setUserData] = useState({
+    const [dataScienceData, setDataScienceData] = useState({
         id: "",
         name: "",
         studyMethod: "",
@@ -20,10 +20,10 @@ const DataScience = () => {
 
     })
 
-    const getUserByID = () => {
-        ApiGet(`general/getFuneralNewsByID/${id}`)
+    const getDataScienceByID = () => {
+        ApiGet(`companyinvestment/get-company-investment-by-id/${id}`)
             .then((res) => {
-                setUserData({
+                setDataScienceData({
                     id: id,
                     name: "",
                     studyMethod: "",
@@ -42,9 +42,21 @@ const DataScience = () => {
     }
 
     useEffect(() => {
+        if (id !== "0") {
+            getDataScienceByID()
+        }
+    }, [id])
+    useEffect(() => {
+        if (id !== "0") {
+            getDataScienceByID()
+        }
+    }, [])
+
+
+    useEffect(() => {
         debugger
         if (id > 0) {
-            setUserData({
+            setDataScienceData({
                 name: "test",
                 studyMethod: "test",
                 studyDesign: "test",
@@ -117,7 +129,7 @@ const DataScience = () => {
                     <button
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                        onClick={() => { }}
+                        onClick={saveInevestmentData}
                     >
                         다운로드
                     </button>

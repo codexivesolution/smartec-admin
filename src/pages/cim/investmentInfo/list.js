@@ -1,5 +1,6 @@
 import router from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Datatable from '../../../components/datatable'
 import SectionTitle from '../../../components/section-title'
 import Widget from '../../../components/widget'
@@ -19,7 +20,9 @@ const List = () => {
             {
                 Header: '첨부파일',
                 accessor: 'file',
-                Cell: (props) => <span><img src="../../../images/Vector.png" /></span>
+                // Cell: (props) => <span><img src="../../../images/Vector.png" onClick={() => downloadFile(props.value)}/></span>
+                Cell: (props) => <span><a href={props.value} target="_blank" download><img src="../../../images/Vector.png" /></a></span>
+                // Cell: (props) => <span><a href="http://6fa1-117-99-107-240.ngrok.io/images/image-1635358636020.pdf" target="_blank" download><img src="../../../images/Vector.png" /></a></span>
             },
             {
                 Header: '작성일',
@@ -61,11 +64,9 @@ const List = () => {
             });
     }
 
-
     const getAllInvestmentData = (per_page = 50, page_number = 1) => {
         ApiGet(`companyinvestment/get-company-investment-by-admin?keyword=${searchKeyword}&per_page=${per_page}&page_number=${page_number}`)
             .then((res) => {
-                console.log("res res list ", res);
                 setInvestmentDataList(res?.data?.companyInvestment &&
                     res?.data?.companyInvestment.map((d, index) => {
                         return {
@@ -80,6 +81,10 @@ const List = () => {
             })
             .catch((error) => {
             });
+    }
+
+    const downloadFile = (file) => {
+
     }
 
     useEffect(() => {

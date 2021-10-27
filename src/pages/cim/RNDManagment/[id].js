@@ -15,6 +15,10 @@ const EditRnDManage = () => {
         image: ""
     })
 
+    const [imgSrc, setImgSrc] = useState("");
+    const [imageName, setImageName] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const handleChange = (e) => {
         setRnDData({
             ...rnDData,
@@ -39,12 +43,14 @@ const EditRnDManage = () => {
     }
 
     const saveRnD = () => {
+
         const body = {
             title: rnDData.title,
             content: rnDData.content,
             thesis_link: rnDData.thesisLink,
-            thesis_file: "test",
+            thesis_file: rnDData.image,
         }
+
         if (id === "0") {
             ApiPost("researchAndDevelopment/add-research-and-development", body)
                 .then((res) => {
@@ -54,6 +60,28 @@ const EditRnDManage = () => {
             ApiPut("researchAndDevelopment/edit-research-and-development/" + id, body)
                 .then((res) => {
                     router.push('/cim/RNDManagment/list')
+                })
+        }
+    }
+
+    const DeleteImg = () => {
+        setImgSrc("")
+        setImageName("")
+        setSelectedFile(undefined)
+    }
+
+    const fnImageUpload = () => {
+        let formData = new FormData();
+        if (selectedFile) {
+            if (selectedFile) {
+                formData.append('image', selectedFile);
+            }
+            ApiPost("general/file-and-image-upload", formData)
+                .then((res) => {
+                    setRnDData({
+                        ...rnDData,
+                        image:  res.url
+                    })
                 })
         }
     }
@@ -68,6 +96,18 @@ const EditRnDManage = () => {
             getRnDDataByID()
         }
     }, [])
+
+    useEffect(() => {
+        if (!selectedFile) {
+            return;
+        }
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setImgSrc(objectUrl);
+        setImageName(selectedFile.name)
+
+        fnImageUpload()
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [selectedFile]);
 
     return (
         <>
@@ -134,6 +174,26 @@ const EditRnDManage = () => {
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
                             <input
+                                id="attechImage"
+                                type="file"
+                                // hidden
+                                // src={imgSrc}
+                                className="form-input"
+                                placeholder="이미지 첨부하기"
+                                src={rnDData.image}
+                                onChange={(e) => {
+                                    if (!e.target.files || e.target.files.length === 0) {
+                                        setSelectedFile(undefined);
+                                        return;
+                                    }
+                                    setSelectedFile(e.target.files[0]);
+                                }}
+                                alt="img"
+                                accept="*"
+                                className="login-input"
+                            />
+
+                            {/* <input
                                 name="month"
                                 type="file"
                                 className="form-input"
@@ -141,7 +201,7 @@ const EditRnDManage = () => {
                                 src={rnDData.image}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>

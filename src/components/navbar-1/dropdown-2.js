@@ -1,5 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Countries from './countries'
+import { getCookie } from '../../helper/util'
+// import i18next from 'i18next'
+
 
 const Dropdown = () => {
   const [hidden, setHidden] = useState(true)
@@ -28,6 +31,30 @@ const Dropdown = () => {
     setHidden(!hidden)
   }
 
+  const [selectedLang, setSelectedLang] = useState("한국어(KR)");
+
+  useEffect(() => {
+    let getLangLocal = localStorage.getItem("i18nextLng");
+    let getLangCookie = getCookie("i18next");
+    let getLangTag = document.documentElement.lang;
+
+    if (
+      getLangLocal === "en" ||
+      getLangCookie === "en" ||
+      getLangTag === "en"
+    ) {
+      // changeLanguage1("en", "English(EN)");
+    } else {
+      // changeLanguage1("ko", "한국어(KR)");
+    }
+  }, []);
+
+
+  // const changeLanguage1 = (lang, name) => {
+  //   setSelectedLang(name);
+  //   i18next.changeLanguage(lang);
+  // };
+
   return (
     <div className="hidden lg:flex relative">
       <button
@@ -36,12 +63,13 @@ const Dropdown = () => {
         className="flex items-center justify-center h-16 w-12">
         <span className={`text-base flag-icon flag-icon-us`}></span>
       </button>
-      <div ref={dropdownRef} 
-          className={`dropdown absolute top-0 right-0 mt-16 ${hidden ? '' : 'open'}`}>
-          <div className="dropdown-content w-64 bottom-start">
-            <Countries />
-          </div>
+      <div ref={dropdownRef}
+        className={`dropdown absolute top-0 right-0 mt-16 ${hidden ? '' : 'open'}`}>
+        <div className="dropdown-content w-64 bottom-start">
+          <Countries />
+          {selectedLang}
         </div>
+      </div>
     </div>
   )
 }

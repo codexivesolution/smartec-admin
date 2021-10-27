@@ -14,6 +14,10 @@ const EditInvestmentInfo = () => {
         file: ""
     })
 
+    const [imgSrc, setImgSrc] = useState("");
+    const [imageName, setImageName] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const handleChange = (e) => {
         setInvestmentData({
             ...investmentData,
@@ -40,9 +44,8 @@ const EditInvestmentInfo = () => {
         const body = {
             title: investmentData.title,
             content: investmentData.content,
-            file: "test",
+            file: investmentData.file,
         }
-        debugger
         if (id === "0") {
             ApiPost("companyinvestment/add-company-investment", body)
                 .then((res) => {
@@ -55,6 +58,47 @@ const EditInvestmentInfo = () => {
                 })
         }
     }
+
+    const DeleteImg = () => {
+        setImgSrc("")
+        setImageName("")
+        setSelectedFile(undefined)
+    }
+
+    const fnImageUpload = () => {
+        let formData = new FormData();
+        if (selectedFile) {
+            if (selectedFile) {
+                formData.append('image', selectedFile);
+            }
+            ApiPost("general/file-and-image-upload", formData)
+                .then((res) => {
+                    console.log("res ============", res);
+                    setInvestmentData({
+                        ...investmentData,
+                        file: res.url
+                    })
+                })
+        }
+    }
+
+    useEffect(() => {
+        console.log("selectedFile", selectedFile);
+        console.log("imageName", imageName);
+        console.log("imgSrc", imgSrc);
+    }, [selectedFile, imageName, imgSrc])
+
+    useEffect(() => {
+        if (!selectedFile) {
+            return;
+        }
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setImgSrc(objectUrl);
+        setImageName(selectedFile.name)
+
+        fnImageUpload()
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [selectedFile]);
 
     useEffect(() => {
         if (id !== "0") {
@@ -114,7 +158,28 @@ const EditInvestmentInfo = () => {
 
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
+
                             <input
+                                id="attechImage"
+                                type="file"
+                                // hidden
+                                // src={imgSrc}
+                                className="form-input"
+                                placeholder="이미지 첨부하기"
+                                src={investmentData.file}
+                                onChange={(e) => {
+                                    if (!e.target.files || e.target.files.length === 0) {
+                                        setSelectedFile(undefined);
+                                        return;
+                                    }
+                                    setSelectedFile(e.target.files[0]);
+                                }}
+                                alt="img"
+                                accept="*"
+                                className="login-input"
+                            />
+
+                            {/* <input
                                 name="month"
                                 type="file"
                                 className="form-input"
@@ -122,7 +187,7 @@ const EditInvestmentInfo = () => {
                                 src={investmentData.file}
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>

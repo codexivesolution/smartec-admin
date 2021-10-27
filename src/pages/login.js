@@ -86,7 +86,6 @@ const login = () => {
 
                 setStatelogin(loginFormState);
                 dispatch(changeLoginState(true))
-                debugger
                 if (saveEmail) {
                     AuthStorage.setStorageData(STORAGEKEY.email, statelogin.email, true);
                 } else {

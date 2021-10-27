@@ -10,7 +10,9 @@ const List = () => {
         () => [
             {
                 Header: '이미지',
-                accessor: 'thesis_file'
+                accessor: 'thesis_file',
+                Cell: (props) => <span><img src={props.value}  height="128" width="128" alt="" /></span>
+                // Cell: (props) => <span><img src="https://www.gstatic.com/webp/gallery3/2_webp_ll.png" height="128" width="128" /></span>
             },
             {
                 Header: '제목',

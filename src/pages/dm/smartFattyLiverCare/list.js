@@ -1,64 +1,115 @@
 import router from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Datatable from '../../../components/datatable'
 import SectionTitle from '../../../components/section-title'
 import Widget from '../../../components/widget'
-import countries from '../../../json/countries.json'
+import { ApiGet, ApiPost } from '../../../helper/API/ApiData'
 
 const List = () => {
     const columns = React.useMemo(
         () => [
             {
                 Header: '번호',
-                accessor: 'alpha3Code'
+                accessor: 'number'
             },
             {
                 Header: '성별',
-                accessor: 'name'
+                accessor: 'sex'
             },
             {
                 Header: '허리둘레',
-                accessor: 'capital'
+                accessor: 'waist_circumference'
             },
             {
                 Header: '수축기 혈압',
-                accessor: 'region'
+                accessor: 'systolic_blood_pressure'
             },
             {
                 Header: '공복혈당',
-                accessor: 'nativeName'
+                accessor: 'fasting_serum_glucose'
             },
             {
                 Header: '중성지방',
-                accessor: ''
+                accessor: 'triglyceride'
             },
             {
                 Header: '알라닌아미노전이효소',
-                accessor: ''
+                accessor: 'alanine_aminotransferase'
             },
             {
                 Header: '지방간 유무',
-                accessor: ''
+                accessor: 'fatty_liver'
             },
             {
                 Header: '지방 수준',
-                accessor: ''
+                accessor: 'liver_fat_content'
             }
         ],
         []
     )
-    const data = React.useMemo(() => countries, [])
     const [searchKeyword, setSearchKeyword] = useState("")
-    const [btnDisable, setBtnDisable] = useState(true)
+    const [sflcDataList, setSFLCDataList] = useState([])
+    const [seletedDeleteIDs, setSeletedDeleteIDs] = useState("")
 
     const handleChange = (e) => {
-        if (e.target.value !== "") {
-            setBtnDisable(false)
-        } else {
-            setBtnDisable(true)
-        }
+        // if (e.target.value !== "") {
+        //     setBtnDisable(false)
+        // } else {
+        //     setBtnDisable(true)
+        // }
         setSearchKeyword(e.target.value)
     }
+
+    const getRowVal = (rowData) => {
+        // router.push('/cim/investmentInfo/'+rowData.id)
+    }
+
+    const getSelectedRowIds = (selectedRowIdsData) => {
+        const ids = selectedRowIdsData.map((data) => data.id).join(',')
+        setSeletedDeleteIDs(ids)
+    }
+
+    const deleteSmartFattyLiverCaredata = () => {
+        ApiPost(`smartFattyLiverCare/delete-smart-fatty-liver-care-by-admin`, {
+            id: seletedDeleteIDs
+        })
+            .then((res) => {
+                getAllSmartFattyLiverCareData(50, 1)
+            })
+            .catch((error) => {
+                console.log("error", error);
+            });
+    }
+
+
+    const getAllSmartFattyLiverCareData = (per_page = 50, page_number = 1) => {
+        ApiGet(`smartFattyLiverCare/get-smart-fatty-liver-care-by-admin?keyword=${searchKeyword}&per_page=${per_page}&page_number=${page_number}`)
+            .then((res) => {
+                console.log("res res", res);
+                setSFLCDataList(res?.data?.smartFattyLiverCare &&
+                    res?.data?.smartFattyLiverCare.map((d, index) => {
+                        return {
+                            id: d?.id,
+                            number: index + 1,
+                            alanine_aminotransferase: d?.alanine_aminotransferase,
+                            fasting_serum_glucose: d?.fasting_serum_glucose,
+                            fatty_liver: d?.fatty_liver,
+                            liver_fat_content: d?.liver_fat_content,
+                            sex: d?.sex,
+                            systolic_blood_pressure: d?.systolic_blood_pressure,
+                            triglyceride: d?.triglyceride,
+                            waist_circumference: d?.waist_circumference,
+                        }
+                    }))
+            })
+            .catch((error) => {
+            });
+    }
+
+    useEffect(() => {
+        getAllSmartFattyLiverCareData(50, 1)
+    }, [])
+
 
     return (
         <>
@@ -84,13 +135,13 @@ const List = () => {
                         <button
                             type="button"
                             className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
-                            // onClick={Login}
-                            disabled={btnDisable}
+                            onClick={() => getAllSmartFattyLiverCareData(50, 1)}
+                        // disabled={btnDisable}
                         >검색
                         </button>
                     </div>
                 </div>
-                <Datatable columns={columns} data={data} pagination={false} numberofpage={false} nextprev={false} />
+                <Datatable columns={columns} data={sflcDataList} pagination={false} numberofpage={false} nextprev={false} getRowVal={getRowVal} getSelectedRowIds={getSelectedRowIds} />
             </Widget>
             <div className="flex flex-col lg:flex-row lg:flex-wrap justify-end">
                 <span className="ml-auto"></span>
@@ -98,8 +149,8 @@ const List = () => {
                     <button
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold "
-                    // onClick={Login}
-                    // disabled={btnDisable}
+                        onClick={deleteSmartFattyLiverCaredata}
+                        disabled={seletedDeleteIDs ? false : true}
                     >선택 삭제
                     </button>
                 </div>

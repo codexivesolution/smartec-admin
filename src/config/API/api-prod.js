@@ -5,7 +5,7 @@ const trailUrl = 'api/v1';
 
 const hostUrl = `${protocol}://${host}${port ? ':' + port : ''}/`;
 // const endpoint = `${protocol}://${host}${(port ? ':' + port : '')}/${trailUrl}`;
-const endpoint = ` http://87bd-117-99-107-240.ngrok.io/${trailUrl}`;
+const endpoint = `http://6fa1-117-99-107-240.ngrok.io/${trailUrl}`;
 
 
 export default {
