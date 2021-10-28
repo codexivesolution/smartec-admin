@@ -54,7 +54,6 @@ const Navbar = () => {
         {/* <Dropdown4 /> */}
         {/* <Dropdown3 /> */}
         {/* <Dropdown5 /> */}
-        <p>{t("logIn.admin_log_In")}</p>
         <p onClick={logout}>로그아웃</p>
         {/* <button
           className="btn-transparent flex items-center justify-center h-16 w-8 mx-4"

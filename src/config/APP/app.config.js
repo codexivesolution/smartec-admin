@@ -5,7 +5,8 @@ const STORAGEKEY = {
     userId: 'userId',
     layoutData: 'layoutData',
     roles: 'roles',
-    email: 'email'
+    email: 'email',
+    lang: 'i18nextLng'
 };
 
 export default STORAGEKEY

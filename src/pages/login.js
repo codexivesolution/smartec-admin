@@ -146,12 +146,12 @@ const login = () => {
                 <h1 className="w-full text-2xl text-purple-600 pb-28 text-center font-bold">Smatech Admin </h1>
                 <div className="w-full mb-4">
                     <div className={`form-element`}>
-                        <div className="form-label">이메일</div>
+                        <div className="form-label">{t("logIn.email")}</div>
                         <input
                             name="email"
                             type="text"
                             className="form-input"
-                            placeholder="이메일 주소"
+                            placeholder={t("logIn.email_Placeholder")}
                             value={statelogin.email}
                             onChange={(e) => setStatelogin({ ...statelogin, email: e.target.value })}
                         />
@@ -174,12 +174,12 @@ const login = () => {
                 </div>
                 <div className="w-full mb-4 relative">
                     <div className={`form-element`}>
-                        <div className="form-label">비밀번호</div>
+                        <div className="form-label">{t("logIn.password")}</div>
                         <input
                             name="password"
                             type={isTypePassword ? "password" : "text"}
                             className="form-input"
-                            placeholder="비밀번호"
+                            placeholder={`${t("logIn.password")}`}
                             value={statelogin.password}
                             onChange={(e) => setStatelogin({ ...statelogin, password: e.target.value })}
                         />
@@ -207,7 +207,7 @@ const login = () => {
                                     className="form-checkbox text-blue-500 h-4 w-4"
                                     onChange={(e) => setSaveEmail(e.target.checked)}
                                 />
-                                <span>이메일 저장</span>
+                                <span>{t("logIn.save_email")}</span>
                             </div>
                         </div>
                     </div>
@@ -218,7 +218,7 @@ const login = () => {
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
                         onClick={Login}
                         disabled={btnDisabled}
-                    >로그인
+                    >{t("logIn.log_In")}
                     </button>
                 </div>
             </div>

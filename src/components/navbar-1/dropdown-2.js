@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/Image';
 import Countries from './countries'
 import { getCookie } from '../../helper/util'
 import i18n from '../../helper/i18n'
@@ -31,7 +33,7 @@ const Dropdown = () => {
     setHidden(!hidden)
   }
 
-  const [selectedLang, setSelectedLang] = useState("한국어(KR)");
+  const [selectedLang, setSelectedLang] = useState("Korean");
 
   useEffect(() => {
     let getLangLocal = localStorage.getItem("i18nextLng");
@@ -43,15 +45,14 @@ const Dropdown = () => {
       getLangCookie === "en" ||
       getLangTag === "en"
     ) {
-      changeLanguage("en", "English(EN)");
+      changeLanguage("en", "English");
     } else {
-      changeLanguage("ko", "한국어(KR)");
+      changeLanguage("ko", "Korean");
     }
   }, []);
 
 
   const changeLanguage = (lang, name) => {
-    console.log(("======================================================================"));
     setSelectedLang(name);
     i18n.changeLanguage(lang);
   };
@@ -62,13 +63,25 @@ const Dropdown = () => {
         ref={buttonRef}
         onClick={handleDropdownClick}
         className="flex items-center justify-center h-16 w-12">
-        <span className={`text-base flag-icon flag-icon-us`}></span>
+        {/* <span className={`selectedLang === 'Korean' ? "text-base flag-icon flag-icon-kr" : "text-base flag-icon flag-icon-en"`}></span> */}
+        <span className={selectedLang === 'Korean' ? "text-base flag-icon flag-icon-kr" : "text-base flag-icon flag-icon-us"}></span>
       </button>
       <div ref={dropdownRef}
         className={`dropdown absolute top-0 right-0 mt-16 ${hidden ? '' : 'open'}`}>
         <div className="dropdown-content w-64 bottom-start">
-          <Countries />
-          {selectedLang}
+          <div className="header-lang  pos-rel f-right">
+            <ul className="header-lang-list">
+              <li><a onClick={() => {
+                changeLanguage("en", "English");
+              }}>English</a></li>
+              <li><a onClick={() => {
+                changeLanguage("ko", "Korean");
+              }}>Korean</a></li>
+
+            </ul>
+          </div>
+          {/* <Countries /> */}
+          {/* {selectedLang} */}
         </div>
       </div>
     </div>
