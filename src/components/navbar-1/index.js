@@ -10,8 +10,12 @@ import Search from './search'
 import AuthStorage from '../../helper/AuthStorage'
 import { changeLoginState } from '../../redux/actions/loginAction'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next';
+
 
 const Navbar = () => {
+  const { t } = useTranslation();
+
   const router = useRouter()
   const { config } = useSelector(
     state => ({
@@ -50,6 +54,7 @@ const Navbar = () => {
         {/* <Dropdown4 /> */}
         {/* <Dropdown3 /> */}
         {/* <Dropdown5 /> */}
+        <p>{t("logIn.admin_log_In")}</p>
         <p onClick={logout}>로그아웃</p>
         {/* <button
           className="btn-transparent flex items-center justify-center h-16 w-8 mx-4"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Countries from './countries'
 import { getCookie } from '../../helper/util'
-// import i18next from 'i18next'
+import i18next from 'i18next'
 
 
 const Dropdown = () => {
@@ -43,17 +43,18 @@ const Dropdown = () => {
       getLangCookie === "en" ||
       getLangTag === "en"
     ) {
-      // changeLanguage1("en", "English(EN)");
+      changeLanguage("en", "English(EN)");
     } else {
-      // changeLanguage1("ko", "한국어(KR)");
+      changeLanguage("ko", "한국어(KR)");
     }
   }, []);
 
 
-  // const changeLanguage1 = (lang, name) => {
-  //   setSelectedLang(name);
-  //   i18next.changeLanguage(lang);
-  // };
+  const changeLanguage = (lang, name) => {
+    console.log(("======================================================================"));
+    setSelectedLang(name);
+    i18next.changeLanguage(lang);
+  };
 
   return (
     <div className="hidden lg:flex relative">

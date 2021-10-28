@@ -1,10 +1,17 @@
 import Head from 'next/head'
-import {useSelector, shallowEqual} from 'react-redux'
+import {useSelector, shallowEqual, useDispatch} from 'react-redux'
 import Navbar1 from '../../components/navbar-1'
 import LeftSidebar1 from '../../components/left-sidebar-1'
 import RightSidebar1 from '../../components/right-sidebar-1'
+import { useEffect } from 'react'
+import { ApiGet } from '../../helper/API/ApiData'
+import AuthStorage from '../../helper/AuthStorage'
+import { changeLoginState } from '../../redux/actions/loginAction'
+import { useRouter } from 'next/router'
 
 const Layout1 = ({children}) => {
+  const dispatch = useDispatch()
+  const router = useRouter()
   const {config, palettes} = useSelector(
     (state) => ({
       config: state.config,
@@ -16,6 +23,24 @@ const Layout1 = ({children}) => {
   let {background, navbar, leftSidebar, rightSidebar} = {
     ...palettes
   }
+
+  useEffect(() => {
+    if (AuthStorage.isUserAuthenticated()) {
+      ApiGet("user/validate")
+        .then((res) => {
+          dispatch(changeLoginState(true));
+        })
+        .catch((error) => {
+          AuthStorage.deauthenticateUser();
+          router.push("/login");
+        });
+    }
+    else {
+      // if (!pathname.includes(location.pathname)) {
+        router.push("/login");
+      // }
+    }
+  }, []);
 
   return (
     <>

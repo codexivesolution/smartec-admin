@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import {Provider} from 'react-redux'
+import {Provider, useDispatch} from 'react-redux'
 import Layout from '../layouts'
 import {useStore} from '../store'
 import Router, { useRouter } from 'next/router'
@@ -27,6 +27,7 @@ import '../css/components/user-widgets/widget-2.css'
 import '../css/components/user-widgets/widget-4.css'
 import AuthStorage from '../helper/AuthStorage'
 import { useEffect } from 'react'
+import { ApiGet } from '../helper/API/ApiData'
 // import { useLocation } from 'react-router'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
@@ -36,26 +37,27 @@ Router.events.on('routeChangeError', () => NProgress.done())
 export default function App({Component, pageProps}) {
   // const location = useLocation()
   const router = useRouter()
+  // const dispatch = useDispatch()
   const store = useStore(pageProps.initialReduxState)
   const pathname = ["/login", "/Registration", "/memorialview", "/memorialhallstatus",]
 
-  useEffect(() => {
-    if (AuthStorage.isUserAuthenticated()) {
-      // ApiGet("user/validate")
-      //   .then((res) => {
-      //     dispatch(changeLoginState(true));
-      //   })
-      //   .catch((error) => {
-      //     AuthStorage.deauthenticateUser();
-      //     router.push("/login");
-      //   });
-    }
-    else {
-      // if (!pathname.includes(location.pathname)) {
-        router.push("/login");
-      // }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (AuthStorage.isUserAuthenticated()) {
+  //     ApiGet("user/validate")
+  //       .then((res) => {
+  //         dispatch(changeLoginState(true));
+  //       })
+  //       .catch((error) => {
+  //         AuthStorage.deauthenticateUser();
+  //         router.push("/login");
+  //       });
+  //   }
+  //   else {
+  //     // if (!pathname.includes(location.pathname)) {
+  //       router.push("/login");
+  //     // }
+  //   }
+  // }, []);
 
   return (
     <>

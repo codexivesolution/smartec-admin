@@ -5,9 +5,11 @@ import { useDispatch } from 'react-redux';
 import STORAGEKEY from '../config/APP/app.config';
 import { ApiPost } from '../helper/API/ApiData';
 import AuthStorage from '../helper/AuthStorage';
+import { useTranslation } from 'react-i18next';
 import { changeLoginState } from '../redux/actions/loginAction';
 
 const login = () => {
+    const { t } = useTranslation();
     const router = useRouter()
     const dispatch = useDispatch();
     const { is_loggedin } = useSelector((state) => state.login);
@@ -140,7 +142,8 @@ const login = () => {
     return (
         <div data-layout="centered" className="w-full h-screen flex items-center justify-center bg-gray-50">
             <div className="flex flex-col lg:flex-row lg:flex-wrap w-full lg:w-1/4">
-                <h1 className="w-full text-2xl text-purple-600 pb-28 text-center font-bold">관리자 로그인</h1>
+                <h1 className="w-full text-2xl text-purple-600 text-center font-bold">{t("logIn.admin_log_In")}</h1>
+                <h1 className="w-full text-2xl text-purple-600 pb-28 text-center font-bold">Smatech Admin </h1>
                 <div className="w-full mb-4">
                     <div className={`form-element`}>
                         <div className="form-label">이메일</div>
