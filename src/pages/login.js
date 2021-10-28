@@ -44,17 +44,17 @@ const login = () => {
         const validEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         if (statelogin.email && !validEmail.test(statelogin.email)) {
-            login_Err.emailFormatErr = "잘못된 이메일."
+            login_Err.emailFormatErr = t("logIn.invalidEmail")
             flag = true
         }
 
         if (!statelogin.email) {
-            login_Err.emailError = "필수 정보입니다.";
+            login_Err.emailError = t("logIn.this_is_required_information");
             flag = true
         }
 
         if (statelogin.password === "") {
-            login_Err.passError = "비밀번호를 한번 더 확인해주세요.";
+            login_Err.passError = t("logIn.incorrect_password");
             flag = true
         }
 
@@ -110,11 +110,11 @@ const login = () => {
             .catch((error) => {
                 if (error === "Wrong Email") {
                     setIncorrectPass("");
-                    setInvalidEmail("필수 정보입니다.");
+                    setInvalidEmail(t("logIn.this_is_required_information"));
                 }
                 if (error === "Wrong Password") {
                     setInvalidEmail("");
-                    setIncorrectPass("비밀번호를 한번 더 확인해주세요.");
+                    setIncorrectPass(t("logIn.incorrect_password"));
                 }
             });
     };
