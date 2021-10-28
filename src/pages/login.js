@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
@@ -5,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import STORAGEKEY from '../config/APP/app.config';
 import { ApiPost } from '../helper/API/ApiData';
 import AuthStorage from '../helper/AuthStorage';
-import { useTranslation } from 'react-i18next';
 import { changeLoginState } from '../redux/actions/loginAction';
 
 const login = () => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Countries from './countries'
 import { getCookie } from '../../helper/util'
-import i18next from 'i18next'
+import i18n from '../../helper/i18n'
 
 
 const Dropdown = () => {
@@ -53,7 +53,7 @@ const Dropdown = () => {
   const changeLanguage = (lang, name) => {
     console.log(("======================================================================"));
     setSelectedLang(name);
-    i18next.changeLanguage(lang);
+    i18n.changeLanguage(lang);
   };
 
   return (
