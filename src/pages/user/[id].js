@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 import SectionTitle from '../../components/section-title';
 import Widget from '../../components/widget';
 import { ApiGet, ApiPatch } from '../../helper/API/ApiData';
-import countries from '../../json/countries.json'
+import { useTranslation } from 'react-i18next';
 
 const EditUser = () => {
+    const { t } = useTranslation();
     const router = useRouter();
     const { id } = router.query
     const [userData, setUserData] = useState({
@@ -19,7 +20,8 @@ const EditUser = () => {
     const [nameDisabled, setNameDisabled] = useState(true)
     const [organizationDisabled, setOrganizationDisabled] = useState(true)
     const [countryDisabled, setCountryDisabled] = useState(true)
-    const countryData = React.useMemo(() => countries, [])
+    const [countryData, setCountryData] = useState([])
+
 
     const handleChange = (e) => {
         setUserData({
@@ -40,13 +42,36 @@ const EditUser = () => {
         }
     }
 
+    const getCountry = () => {
+        ApiGet(`general/country`)
+            .then((res) => {
+                    console.log("country",res);
+                    setCountryData(
+                        res?.data &&
+                        res?.data.map((d) => {
+                            return {
+                                value: d.id,
+                                label: d.name
+                            }
+                        }) 
+                    )
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        console.log("countryData",countryData);
+    }, [countryData])
+
     const getUserByID = () => {
         ApiGet(`user/${id}`)
             .then((res) => {
                 setUserData({
                     id: id,
                     name: res.data.first_name + " " + res.data.last_name,
-                    regDate: res.data.country,
+                    regDate: res.data.registration_date,
                     email: res.data.email,
                     organization: res.data.organization,
                     country: res.data.country,
@@ -65,7 +90,7 @@ const EditUser = () => {
             organization: userData.organization,
             country: userData.country
         }
-        
+
         ApiPatch("admin/edituser/" + id, body)
             .then((res) => {
                 router.push('/user/list');
@@ -73,20 +98,23 @@ const EditUser = () => {
     }
 
     useEffect(() => {
-        getUserByID()
+        getCountry()
+        if (id) {
+            getUserByID()
+        }
     }, [])
 
     return (
         <>
-            <SectionTitle title="기본 설정" subtitle="사용자 관리" />
+            <SectionTitle title={`${t("Basic_Setting.basic_setting")}`} subtitle={`${t("Basic_Setting.user_management")}`} />
             <Widget
-                title="상세정보"
+                title={`${t("Basic_Setting.detail_information")}`}
                 description=""
             >
                 <div className="flex flex-col lg:flex-row lg:flex-wrap w-full lg:space-x-4 mb-10">
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
-                            <div className="form-label">이름</div>
+                            <div className="form-label">{t("name")}</div>
                             <input
                                 name="name"
                                 type="text"
@@ -101,7 +129,8 @@ const EditUser = () => {
                                 type="button"
                                 className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded pt-5 pb-4 text-xl font-bold"
                                 onClick={() => disableEnable("name")}
-                            >수정
+                            >
+                                {t("edit")}
                             </button>
                         </div>
                     </div>
@@ -110,7 +139,7 @@ const EditUser = () => {
                 <div className="flex flex-col lg:flex-row lg:flex-wrap w-full lg:space-x-4 mb-10">
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
-                            <div className="form-label">가입일</div>
+                            <div className="form-label">{t("registration_date")}</div>
                             <p> {userData.regDate} </p>
                         </div>
                     </div>
@@ -119,7 +148,7 @@ const EditUser = () => {
                 <div className="flex flex-col lg:flex-row lg:flex-wrap w-full lg:space-x-4 mb-10">
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
-                            <div className="form-label">이메일</div>
+                            <div className="form-label">{t("logIn.email")}</div>
                             <input
                                 name="email"
                                 type="text"
@@ -136,7 +165,7 @@ const EditUser = () => {
                 <div className="flex flex-col lg:flex-row lg:flex-wrap w-full lg:space-x-4 mb-10">
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
-                            <div className="form-label">소속</div>
+                            <div className="form-label">{t("organization")}</div>
                             <input
                                 name="organization"
                                 type="text"
@@ -151,7 +180,8 @@ const EditUser = () => {
                                 type="button"
                                 className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded pt-5 pb-4 text-xl font-bold"
                                 onClick={() => disableEnable("organization")}
-                            >수정
+                            >
+                                {t("edit")}
                             </button>
                         </div>
                     </div>
@@ -160,7 +190,7 @@ const EditUser = () => {
                 <div className="flex flex-col lg:flex-row lg:flex-wrap w-full lg:space-x-4 mb-10">
                     <div className="w-full lg:w-1/4">
                         <div className={`form-element form-element-inline`}>
-                            <div className="form-label">국가</div>
+                            <div className="form-label">{t("country")}</div>
                             <select
                                 name="country"
                                 value={userData.country}
@@ -171,7 +201,7 @@ const EditUser = () => {
                             >
                                 {countryData.map((c) => (
                                     <>
-                                        <option value={c.name}>{c.name}</option>
+                                        <option value={c.value}>{c.label}</option>
                                     </>
                                 ))}
                             </select>
@@ -179,7 +209,8 @@ const EditUser = () => {
                                 type="button"
                                 className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded pt-5 pb-4 text-xl font-bold"
                                 onClick={() => disableEnable("country")}
-                            >수정
+                            >
+                                {t("edit")}
                             </button>
                         </div>
                     </div>
@@ -194,7 +225,7 @@ const EditUser = () => {
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
                         onClick={saveUser}
                     >
-                        저장
+                        {t("save")}
                     </button>
                 </div>
             </div>

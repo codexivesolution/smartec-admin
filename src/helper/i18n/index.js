@@ -16,16 +16,24 @@ const resources = {
 
 i18n.use(initReactI18next) // passes i18n down to react-i18next
   .use(LanguageDetector).init({
-    resources: resources,
-    debug: true,
-    interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
+    // resources: resources,
+    // debug: true,
+    // interpolation: {
+    //   escapeValue: false, // not needed for react as it escapes by default
+    // },
+
+    resources,
+    detection: {
+      order: ['cookie', 'localStorage', 'htmlTag'],
+      caches: ['cookie', 'localStorage']
     },
+
+
     // lng: 'ko',
     // lng: AuthStorage.getLang(),
   }, function (err, t) {
     // initialized and ready to go!
-    console.log("Ready to go!");
+    // console.log("Ready to go!");
   });
 
 export default i18n;

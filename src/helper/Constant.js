@@ -1,36 +1,38 @@
 
-export type Role = "USER" | "ADMIN";
+export const Role = "USER" | "ADMIN";
 
-enum RelationShip {
-    daughter = "딸",
-    son = "아들",
-    other = "직접 입력"
-}
-enum ServiceDuration {
-    days = "3일",
-    week = "1주일",
-    month = "1달"
+const DataScienceSubType = {
+    StudyDesign : "StudyDesign",
+    GroupVariable : "GroupVariable",
+    AdjustmentVariable : "AdjustmentVariable",
+    OutcomeVariable : "OutcomeVariable",
+    SubgroupVariable : "SubgroupVariable",
+    ExposureVariable : "ExposureVariable",
+    FollowUpVariable : "FollowUpVariable",
 }
 
-enum MemorialHallStatusEnum {
-    public = "Public",
-    private = "Private",
+const DataScienceSubTypeEn = {
+    StudyDesign : "Study Design",
+    GroupVariable : "Group variable",
+    AdjustmentVariable : "Adjustment Variable",
+    OutcomeVariable : "Outcome Variable",
+    SubgroupVariable : "Subgroup Variable",
+    ExposureVariable : "Exposure Variable",
+    FollowUpVariable : "Follow-up Variable",
 }
-enum InquiryStatus {
-    InProgress = "InProgress",
-    Complete = "Complete",
+
+const DataScienceSubTypeKo = {
+    StudyDesign : "연구 디자인",
+    GroupVariable : "그룹 변수",
+    AdjustmentVariable : "보정 변수",
+    OutcomeVariable : "결과 변수",
+    SubgroupVariable : "하위그룹 변수",
+    ExposureVariable : "노출 변수",
+    FollowUpVariable : "추적관찰 변수",
 }
-enum FreeConsultationApplicationUserType {
-    Empty = "Empty",
-    Non = "Non",
-    Standard = "Standard",
-    Basic = "Basic",
-    Premium = "Premium"
-}
+
 export {
-    RelationShip,
-    ServiceDuration,
-    MemorialHallStatusEnum,
-    InquiryStatus,
-    FreeConsultationApplicationUserType
+    DataScienceSubType,
+    DataScienceSubTypeEn,
+    DataScienceSubTypeKo
 };

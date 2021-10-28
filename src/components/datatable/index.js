@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useTable, useSortBy, usePagination, useRowSelect } from 'react-table'
 import { PageWithText } from '../pagination'
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
+import { useTranslation } from 'react-i18next';
+
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -24,6 +26,8 @@ const IndeterminateCheckbox = React.forwardRef(
 )
 
 const Datatable = ({ columns, data, pagination, numberofpage, nextprev, getRowVal, getSelectedRowIds }) => {
+  const { t } = useTranslation();
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -58,7 +62,7 @@ const Datatable = ({ columns, data, pagination, numberofpage, nextprev, getRowVa
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <>
               {/* <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />  */}
-              선택
+              {t("select")}
             </>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method

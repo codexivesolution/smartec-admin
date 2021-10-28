@@ -4,6 +4,24 @@
   "data_science": "데이터사이언스",
   "smart_fatty_liver_care": "스마트지방간케어",
   "investment_information": "투자정보",
+  "search": "검색",
+  "delete_selected": "Delete selected",
+  "save": "저장",
+  "edit": "수정",
+  "registration_date": "가입일",
+  "country": "국가",
+  "organization": "소속",
+  "name": "이름",
+  "number": "번호",
+  "select": "선택",
+  "enter_search_words": "검색어 입력",
+  "type": "유형",
+  "content": "내용",
+  "file_submitted": "제출파일",
+  "attachment": "첨부파일",
+  "download": "다운로드",
+  "user_input_data": "사용자 입력 정보",
+  "date_registered": "작성일",
   "logIn": {
     "admin_log_In": "관리자 로그인",
     "log_In": "로그인",
@@ -17,5 +35,22 @@
     "this_is_required_information": "존재하지 않는 이메일입니다.",
     "incorrect_password": "비밀번호가 일치하지 않습니다.",
     "invalidEmail": "잘못된 이메일 형식"
+  },
+  "Basic_Setting": {
+    "basic_setting": "기본 설정",
+    "user_management": "사용자 관리",
+    "e_mail_ID": "이메일(아이디)",
+    "detail_information": "상세정보"
+  },
+  "Data_Management": {
+    "data_management": "자료 관리",
+    "data_science": "데이터 사이언스",
+    "study_method": "연구 유형",
+    "study_design": "연구 디자인",
+    "exposure_variable": "노출 변수",
+    "adjustment_variable": "보정 변수",
+    "outcome_variable": "결과 변수",
+    "follow_up_variable": "추적관찰 변수",
+    "subgroup_variable": "첨부파일"
   }
 }

@@ -8,6 +8,7 @@ import i18n from '../../helper/i18n'
 
 const Dropdown = () => {
   const [hidden, setHidden] = useState(true)
+  const [temp, setTemp] = useState(false);
 
   const buttonRef = useRef(null)
   const dropdownRef = useRef(null)
@@ -55,6 +56,12 @@ const Dropdown = () => {
   const changeLanguage = (lang, name) => {
     setSelectedLang(name);
     i18n.changeLanguage(lang);
+
+    if (temp) {
+      let currentPath = location.pathname + location.search;
+      window.location.href = currentPath;
+  }
+  setTemp(true)
   };
 
   return (

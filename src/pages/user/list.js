@@ -5,32 +5,36 @@ import Widget from '../../components/widget'
 import { ApiGet, ApiPut } from '../../helper/API/ApiData'
 import moment from 'moment'
 import router from 'next/router'
+import { useTranslation } from 'react-i18next';
+
 
 const List = () => {
+    const { t } = useTranslation();
+
     const columns = React.useMemo(
         () => [
             {
-                Header: '번호',
+                Header: `${t("number")}`,
                 accessor: 'number'
             },
             {
-                Header: '이메일(아이디)',
+                Header: `${t("Basic_Setting.e_mail_ID")}`,
                 accessor: 'email'
             },
             {
-                Header: '이름',
+                Header: `${t("name")}`,
                 accessor: 'name'
             },
             {
-                Header: '소속',
+                Header: `${t("organization")}`,
                 accessor: 'organization'
             },
             {
-                Header: '국가',
+                Header: `${t("country")}`,
                 accessor: 'country'
             },
             {
-                Header: '가입일',
+                Header: `${t("registration_date")}`,
                 accessor: 'registrationDate',
                 // Cell: (props) => <span>{formatNumber(props.value)}</span>
             }
@@ -97,7 +101,7 @@ const List = () => {
 
     return (
         <>
-            <SectionTitle title="기본 설정" subtitle="사용자 관리" />
+            <SectionTitle title={`${t("Basic_Setting.basic_setting")}`} subtitle={`${t("Basic_Setting.user_management")}`} />
             <Widget
                 title=""
                 description=""
@@ -109,7 +113,7 @@ const List = () => {
                                 name="search"
                                 type="text"
                                 className="form-input"
-                                placeholder="검색어 입력"
+                                placeholder={`${t("enter_search_words")}`}
                                 value={searchKeyword}
                                 onChange={(e) => handleChange(e)}
                             />
@@ -120,7 +124,8 @@ const List = () => {
                             type="button"
                             className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
                             onClick={() => getAllUser()}
-                        >검색
+                        >
+                            {t("search")}
                         </button>
                     </div>
                 </div>
@@ -133,7 +138,8 @@ const List = () => {
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold "
                         onClick={deleteUsers}
                         disabled={seletedDeleteIDs ? false : true}
-                    >선택 삭제
+                    >
+                        {t("delete_selected")}
                     </button>
                 </div>
                 <div className="mb-4 ">
@@ -141,7 +147,8 @@ const List = () => {
                         type="button"
                         className="btn btn-default bg-blue-500 hover:bg-blue-600 text-white btn-rounded w-full pt-5 pb-4 text-xl font-bold"
                     // onClick={Login}
-                    >저장
+                    >
+                        {t("save")}
                     </button>
                 </div>
             </div>

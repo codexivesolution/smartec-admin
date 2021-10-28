@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import {Provider, useDispatch} from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 import Layout from '../layouts'
-import {useStore} from '../store'
+import { useStore } from '../store'
 import Router, { useRouter } from 'next/router'
 import NProgress from 'nprogress'
 import '../css/tailwind.css'
@@ -26,38 +26,46 @@ import '../css/components/tabs.css'
 import '../css/components/user-widgets/widget-2.css'
 import '../css/components/user-widgets/widget-4.css'
 import AuthStorage from '../helper/AuthStorage'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiGet } from '../helper/API/ApiData'
-// import { useLocation } from 'react-router'
+// import { changeLoginState } from '../redux/actions/loginAction'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
-export default function App({Component, pageProps}) {
-  // const location = useLocation()
+export default function App({ Component, pageProps }) {
   const router = useRouter()
+  const [IsLoading, setIsLoading] = useState(false)
   // const dispatch = useDispatch()
   const store = useStore(pageProps.initialReduxState)
   const pathname = ["/login", "/Registration", "/memorialview", "/memorialhallstatus",]
 
-  // useEffect(() => {
-  //   if (AuthStorage.isUserAuthenticated()) {
-  //     ApiGet("user/validate")
-  //       .then((res) => {
-  //         dispatch(changeLoginState(true));
-  //       })
-  //       .catch((error) => {
-  //         AuthStorage.deauthenticateUser();
-  //         router.push("/login");
-  //       });
-  //   }
-  //   else {
-  //     // if (!pathname.includes(location.pathname)) {
-  //       router.push("/login");
-  //     // }
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (AuthStorage.isUserAuthenticated()) {
+      ApiGet("admin/validate")
+        .then((res) => {
+          // dispatch(changeLoginState(true));
+        })
+        .catch((error) => {
+          AuthStorage.deauthenticateUser();
+          router.push("/login");
+        });
+    }
+    else {
+      // if (!pathname.includes(location.pathname)) {
+        router.push("/login");
+      // }
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true)
+  }, [])
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, 50);
 
   return (
     <>
@@ -68,9 +76,11 @@ export default function App({Component, pageProps}) {
         />
       </Head>
       <Provider store={store}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        {!IsLoading &&
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        }
       </Provider>
     </>
   )

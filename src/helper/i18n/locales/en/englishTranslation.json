@@ -4,6 +4,24 @@
   "data_science": "Data Science",
   "smart_fatty_liver_care": "Smart Fatty Liver Care",
   "investment_information": "Investment Information",
+  "search": "Search",
+  "delete_selected": "Delete selected",
+  "save": "Save",
+  "edit": "Edit",
+  "registration_date": "Registration Date",
+  "country": "Country",
+  "organization": "Organization",
+  "name": "Name",
+  "number": "Number",
+  "select": "Select",
+  "enter_search_words": "Enter search words",
+  "type": "Type",
+  "content": "Content",
+  "file_submitted": "File Submitted",
+  "attachment": "Attachment",
+  "download": "Download",
+  "user_input_data": "User Input Data",
+  "date_registered": "Date Registered",
   "logIn": {
     "admin_log_In": "Admin Log-in",
     "log_In": "Log in",
@@ -17,5 +35,22 @@
     "this_is_required_information": "You have entered an invalid e-mail address.",
     "incorrect_password": "incorrect password",
     "invalidEmail": "Invalid Email"
+  },
+  "Basic_Setting": {
+    "basic_setting": "Basic Setting",
+    "user_management": "User Management",
+    "e_mail_ID": "e-mail (ID)",
+    "detail_information": "Detail Information"
+  },
+  "Data_Management": {
+    "data_management": "Data Management",
+    "data_science": "Data Science",
+    "study_method": "Study Method",
+    "study_design": "Study Design",
+    "exposure_variable": "Exposure Variable",
+    "adjustment_variable": "Adjustment Variable",
+    "outcome_variable": "Outcome Variable",
+    "follow_up_variable": "Follow-up Variable",
+    "subgroup_variable": "Subgroup Variable"
   }
 }

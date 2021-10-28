@@ -5,6 +5,7 @@ import Datatable from '../../../components/datatable'
 import SectionTitle from '../../../components/section-title'
 import Widget from '../../../components/widget'
 import { ApiGet, ApiPost } from '../../../helper/API/ApiData'
+import downloadIcon from '../../../images/Vector.png'
 
 const List = () => {
     const columns = React.useMemo(
@@ -21,8 +22,10 @@ const List = () => {
                 Header: '첨부파일',
                 accessor: 'file',
                 // Cell: (props) => <span><img src="../../../images/Vector.png" onClick={() => downloadFile(props.value)}/></span>
-                Cell: (props) => <span><a href={props.value} target="_blank" download><img src="../../../images/Vector.png" /></a></span>
+                // Cell: (props) => <span><a href={props.value} target="_blank" download><img src="../../../images/Vector.png" /></a></span>
                 // Cell: (props) => <span><a href="http://6fa1-117-99-107-240.ngrok.io/images/image-1635358636020.pdf" target="_blank" download><img src="../../../images/Vector.png" /></a></span>
+                Cell: (props) => <span onClick={() => download(props.value)} ><img src="../../../images/Vector.png" /></span>
+
             },
             {
                 Header: '작성일',
@@ -34,6 +37,19 @@ const List = () => {
     const [searchKeyword, setSearchKeyword] = useState("")
     const [investmentDataList, setInvestmentDataList] = useState([])
     const [seletedDeleteIDs, setSeletedDeleteIDs] = useState("")
+
+    const download = (url) => {
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const fileName = Math.floor(Math.random() * 10000000000);
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+            })
+            .catch(console.error);
+    }
 
     const handleChange = (e) => {
         setSearchKeyword(e.target.value)
